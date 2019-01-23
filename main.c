@@ -49,7 +49,7 @@ int main() {
         perror("semafor");
         exit(1);
     }
-    semctl(sid[0],0,SETVAL,15);
+    semctl(sid[0],0,SETVAL,20);
     semaforek.sem_num=0;
     semaforek.sem_flg=0;
 
@@ -57,29 +57,29 @@ int main() {
     kierunek.sem_num=0;
     kierunek.sem_flg=0;
 
-    struct samochod probne[9];
+    struct samochod probne[20];
     int i=0;
     int *stat;
 
 
     while (1) {
         printf("Z lewej na prawa\n");
-        for (i = 0; i < 9; i++) {
+        for (i = 0; i < 20; i++) {
             probne[i] = inicjujauto(i);
             if ((fork()) == 0) {
                 jedz(probne[i]);
             }
         }
-        kierunek.sem_op = -9;
+        kierunek.sem_op = -20;
         semop(sid[1], &kierunek, 1);
         printf("Z prawej na lewa\n");
-        for (i = 0; i < 9; i++) {
-            probne[i] = inicjujauto(i + 10);
+        for (i = 0; i < 20; i++) {
+            probne[i] = inicjujauto(i);
             if ((fork()) == 0) {
                 jedz(probne[i]);
             }
         }
-        kierunek.sem_op = -9;
+        kierunek.sem_op = -20;
         semop(sid[1], &kierunek, 1);
     }
     return 0;
